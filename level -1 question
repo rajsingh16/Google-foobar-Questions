@@ -1,0 +1,22 @@
+# given two almost identical lists of worker Ids x and y where one of the lists contains additional id write a function to compare the lists and return the additional id 
+
+def solution(x, y):
+    id_count = {}
+    
+    # Count occurrences of IDs in list x
+    for id in x:
+        if id in id_count:
+            id_count[id] += 1
+        else:
+            id_count[id] = 1
+    
+    # Compare IDs in list y with the counts in the dictionary
+    for id in y:
+        if id in id_count:
+            id_count[id] -= 1
+            if id_count[id] == 0:
+                del id_count[id]
+        else:
+            return id  # Return the additional ID
+    
+    return None
