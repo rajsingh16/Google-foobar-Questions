@@ -1,0 +1,45 @@
+'''you have maps of the parts of the space station each starting at a work area exit and ending at the door to an escape pod the map is represented as  a matrix of 0s and 1s, where 0s are passable space and 1s are impassable walls . the door out of the station is at he top left (0,0) and the door into an escape pod is at the bottom right (w-1,h-1).
+
+'''write a function solution(map)that generates the length of the shortest path from the station door to the escape pod , where you are allowed to remove one wall as part of your remodeling plans the path length is the total number of nodes you pass through , passable(0). the map will always be solvable, through you may not need to remove a wall . The height and width of the map can be from 2 to 20 . Moves can only be made in cardinal direction;no diagonals moves are allowed
+def sht_pth(sx, sy, map):
+    w = len(map[0])
+    h = len(map)
+    board = [[None for i in range(w)] for i in range(h)]
+    board[sx][sy] = 1
+
+    arr = [(sx, sy)]
+    while arr:
+        x, y = arr.pop(0)
+        for i in [[1,0],[-1,0],[0,-1],[0,1]]:
+            nx, ny = x + i[0], y + i[1]
+            if 0 <= nx < h and 0 <= ny < w:
+                if board[nx][ny] is None:
+                    board[nx][ny] = board[x][y] + 1
+                    if map[nx][ny] == 1 :
+                        continue
+                    arr.append((nx, ny))
+
+    return board
+
+def solution(map):
+    w = len(map[0])
+    h = len(map)
+    tb = sht_pth(0, 0, map)
+    bt = sht_pth(h-1, w-1, map)
+    board = []
+
+    ans = 2 ** 32-1
+    for i in range(h):
+        for j in range(w):
+            if tb[i][j] and bt[i][j]:
+                ans = min(tb[i][j] + bt[i][j] - 1, ans)
+    return ans
+
+map = [
+    [0, 1, 0, 0],
+    [0, 0, 0, 1],
+    [1, 1, 0, 0],
+    [0, 0, 0, 0]
+]
+result = solution(map)
+print(result)
